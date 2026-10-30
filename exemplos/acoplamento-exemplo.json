@@ -1,0 +1,65 @@
+{
+  "nos": [
+    { "nome": "commons-lib", "tipo": "lib" },
+    { "nome": "pedidos-service", "tipo": "app" },
+    { "nome": "estoque-service", "tipo": "app" },
+    { "nome": "pagamentos-service", "tipo": "app" },
+    { "nome": "pedidos-api", "tipo": "lib" }
+  ],
+  "arestas": [
+    {
+      "origem": "pedidos-service",
+      "destino": "commons-lib",
+      "tipo": "build",
+      "peso": 1,
+      "evidencias": [
+        { "arquivo": "pedidos-service/pom.xml", "linha": 22, "trecho": "<artifactId>commons-lib</artifactId>" }
+      ]
+    },
+    {
+      "origem": "estoque-service",
+      "destino": "commons-lib",
+      "tipo": "build",
+      "peso": 1,
+      "evidencias": [
+        { "arquivo": "estoque-service/pom.xml", "linha": 19, "trecho": "<artifactId>commons-lib</artifactId>" }
+      ]
+    },
+    {
+      "origem": "pedidos-service",
+      "destino": "estoque-service",
+      "tipo": "evento_assincrono",
+      "peso": 3,
+      "evidencias": [
+        { "arquivo": "pedidos-service/src/main/java/.../PedidoEventPublisher.java", "linha": 34, "trecho": "kafkaTemplate.send(\"pedido.criado\", evento);" }
+      ]
+    },
+    {
+      "origem": "estoque-service",
+      "destino": "pedidos-service",
+      "tipo": "rest_sincrono",
+      "peso": 2,
+      "evidencias": [
+        { "arquivo": "estoque-service/src/main/java/.../PedidoClient.java", "linha": 18, "trecho": "@FeignClient(name = \"pedidos-service\")" }
+      ]
+    },
+    {
+      "origem": "pedidos-service",
+      "destino": "pagamentos-service",
+      "tipo": "rest_sincrono",
+      "peso": 4,
+      "evidencias": [
+        { "arquivo": "pedidos-service/src/main/java/.../PagamentoClient.java", "linha": 12, "trecho": "@FeignClient(name = \"pagamentos-service\")" }
+      ]
+    },
+    {
+      "origem": "pedidos-service",
+      "destino": "pedidos-api",
+      "tipo": "build",
+      "peso": 1,
+      "evidencias": [
+        { "arquivo": "pedidos-service/pom.xml", "linha": 27, "trecho": "<artifactId>pedidos-api</artifactId>" }
+      ]
+    }
+  ]
+}
